@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User List</title>
+</head>
+<body>
+<form method="post">
+<table border="1" cellspacing="0" width="100%" >
+    <tbody>
+    <tr>
+        <td width="5%"><b>ID </b></td>
+        <td width="10%"><b>Name </b></td>
+        <td width="10%"><b>Login </b></td>
+        <td width="10%"><b>Password </b></td>
+        <td width="10%"><b>Roles</b></td>
+        <td width="10%" colspan="2"><b>Actions</b></td>
+
+    </tr>
+        <tr th:each="user : ${listUser}">
+            <td><span th:text="${user.id}"></span></td>
+            <td><span th:text="${user.name}"></span></td>
+            <td><span th:text="${user.login}"></span></td>
+            <td><span th:text="${user.password}"></span></td>
+            <td><ul th:each="role : ${user.roles}" >
+                <li th:text="${role.name}"></li>
+            </ul></td>
+            <td><button formaction="update" type="submit" name="id" th:value="${user.id}">Update</button></td>
+            <td><button formaction="delete" type="submit" name="id" th:value="${user.id}">Delete</button></td>
+        </tr>
+    </th:>
+    </tbody>
+</table>
+<!--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
+</form>
+<a href="/admin/addUser" role="button" data-toggle="modal">Add new user</a>
+<br/>
+<br/>
+<form action="/logout" method="POST">
+    <input type="submit" value="Logout"/>
+<!--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
+
+</form>
+</body>
+</html>
