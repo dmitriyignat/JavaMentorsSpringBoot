@@ -31,13 +31,16 @@
 </table>
 <!--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
 </form>
-<a href="/admin/addUser" role="button" data-toggle="modal">Add new user</a>
+<a href="/addUser" role="button" data-toggle="modal">Add new user</a>
 <br/>
 <br/>
+<form th:action="@{/welcome}" method="GET">
+    <input type="submit" value="Back to main page"/>
+</form>
+
 <form action="/logout" method="POST">
     <input type="submit" value="Logout"/>
-<!--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
-
 </form>
+
 </body>
 </html>

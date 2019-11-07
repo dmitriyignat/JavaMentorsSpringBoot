@@ -2,15 +2,12 @@ package mentors.spring_boot.config;
 
 import mentors.spring_boot.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 
 @Configuration
@@ -19,11 +16,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userService;
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    public WebSecurityConfig(UserDetailsServiceImpl userService, AuthenticationSuccessHandler authenticationSuccessHandler) {
+    public WebSecurityConfig(UserDetailsServiceImpl userService) {
         this.userService = userService;
-        this.authenticationSuccessHandler = authenticationSuccessHandler;
     }
 
 
@@ -46,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("app_username")
                 .passwordParameter("app_password")
                 .permitAll()
-                .successHandler(authenticationSuccessHandler)
+                .defaultSuccessUrl("/welcome")
                 .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")

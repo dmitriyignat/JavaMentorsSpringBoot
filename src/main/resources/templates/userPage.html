@@ -11,6 +11,9 @@
     Login: <span th:text="${user.login}"></span><br/>
 
     <br/>
+    <form th:action="@{/read}" method="GET" th:if="${roles.contains('ROLE_ADMIN')}">
+        <input type="submit" value="Show all users"/>
+    </form>
     <form th:action="@{/logout}" method="POST">
         <input type="submit" value="Logout"/>
     </form>
