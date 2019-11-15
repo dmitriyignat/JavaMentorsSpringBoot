@@ -1,12 +1,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Please Login</title>
+    <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <style>
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+        .btn {
+            margin-top: 10px;
+        }
+    </style>
 </head>
-<body>
-<form th:action="@{/login}" method="post">
-    Enter UserName: <input type="text" name="app_username"/><br/><br/>
-    Enter Password: <input type="password" name="app_password"/><br/><br/>
-    <input type="submit" value="Login"/>
+<body class="text-center">
+<form class="form-signin" th:action="@{/login}" method="post" >
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="inputLogin" class="sr-only">Login</label>
+    <input type="text" id="inputLogin" name="app_username" class="form-control" placeholder="Login" required autofocus />
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" name="app_password" class="form-control" placeholder="Password"/>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 </form>
+<script th:src="@{webjars/jquery/3.4.1/jquery.min.js}"></script>
+<script th:src="@{webjars/popper.js/1.14.7/umd/popper.min.js}"></script>
+<script th:src="@{webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
 </body>
 </html>

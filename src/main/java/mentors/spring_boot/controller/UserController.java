@@ -45,28 +45,31 @@ public class UserController {
         model.setViewName("userList");
         return model;
     }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ModelAndView redirectToUser(@RequestParam("id") long id, ModelAndView mv){
-        User user = (User)service.getById(id);
-        List<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toList());
-        mv.addObject("user", user);
-        mv.addObject("roles", roles);
-        mv.addObject("message", "Update user");
-        mv.setViewName("user");
-        return mv;
-    }
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-    public String updateUser(@RequestParam("id") long id, @RequestParam("name") String name, @RequestParam("role") String[] roles,
+    public String updateUser(@RequestParam("id") long id, @RequestParam("name") String name, @RequestParam("role") String roles,
                              @RequestParam("login") String login, @RequestParam("password") String password) {
         User user = (User)service.getById(id);
         if (user.getLogin().equals(login) || service.validate(login, password) <= 0) {
             user = new User(login, name, password);
             user.setId(id);
-            service.update(user, roles);
+            roles = roles.contains("admin") ? "ROLE_ADMIN" : "ROLE_USER";
+            String[] rolesList = {roles};
+            service.update(user, rolesList);
+        }
+        return "redirect:/read";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    public String addUser(@RequestParam("name") String name, @RequestParam("login") String login,
+                          @RequestParam("password") String password, @RequestParam("role") String role) {
+
+        User user = new User(login, name, password);
+        if (service.validate(login, password) == 0) {
+            role = role.contains("admin") ? "ROLE_ADMIN" : "ROLE_USER";
+            String[] roles = {role};
+            service.add(user, roles);
         }
         return "redirect:/read";
     }
@@ -77,31 +80,6 @@ public class UserController {
         service.delete(id);
         return "redirect:/read";
     }
-
-    @RequestMapping(value = "/addUser", method = RequestMethod.GET)
-    public ModelAndView redirectToUser(ModelAndView mv){
-        mv.addObject("message", "Add user");
-        mv.setViewName("user");
-        return mv;
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-    public String addUser(@RequestParam("name") String name, @RequestParam("login") String login,
-                          @RequestParam("password") String password, @RequestParam("role") String[] roles) {
-
-        User user = new User(login, name, password);
-        if (service.validate(login, password) == 0) {
-            service.add(user, roles);
-        }
-        return "redirect:/read";
-    }
-
-//    @RequestMapping(value="/error")
-//    public ModelAndView error(ModelAndView model) {
-//        model.setViewName("error");
-//        return model;
-//    }
 
         @RequestMapping("/login")
     public String login() {
