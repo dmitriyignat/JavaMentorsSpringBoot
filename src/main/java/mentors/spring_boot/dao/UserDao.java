@@ -1,21 +1,25 @@
 package mentors.spring_boot.dao;
 
+import mentors.spring_boot.model.Role;
+import mentors.spring_boot.model.User;
+
 import java.util.List;
+import java.util.Set;
 
-public interface UserDao<T> {
+public interface UserDao {
 
-    T getUserByLogin(String login);
+    User getUserByLogin(String login);
 
-    List<T> selectAll();
+    List<User> selectAll();
 
-    T selectById(long id);
+    User selectById(long id);
 
     long validate(String login, String password);
 
-    void add(T t, String[] roles);
+    void add(User user, List<String> roles);
 
     void delete(long id);
 
-    void update(T t, String[] roles);
+    void update(User user, List<String> roles);
 
 }

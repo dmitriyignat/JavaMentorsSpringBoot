@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import mentors.spring_boot.model.Role;
 import java.util.HashSet;
@@ -21,10 +20,10 @@ public class UserDaoHibernateImpl implements UserDao {
     private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
-    public Object getUserByLogin(String login) {
+    public User getUserByLogin(String login) {
         TypedQuery<User> query = entityManager.createQuery("SELECT u from User u WHERE u.login = :login", User.class);
         query.setParameter("login", login);
-        return query.getSingleResult();
+        return (User)query.getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
@@ -32,7 +31,7 @@ public class UserDaoHibernateImpl implements UserDao {
         return (List<User>)entityManager.createQuery("SELECT u FROM User u").getResultList();
     }
 
-    public Object selectById(long id) {
+    public User selectById(long id) {
         return (User)entityManager.find(User.class, id);
     }
 
@@ -44,14 +43,13 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @SuppressWarnings("unchecked")
-    public void add(Object o, String[] roles) {
-        User user = (User) o;
+    public void add(User user, List<String> roles) {
         for (String role : roles) {
             TypedQuery<Role> query =  entityManager.createQuery("SELECT r from Role r WHERE r.name = :name", Role.class);
             query.setParameter("name", role);
             user.addRole(query.getSingleResult());
         }
-        entityManager.persist((User) o);
+        entityManager.persist(user);
     }
 
     public void delete(long id) {
@@ -59,8 +57,7 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @SuppressWarnings("unchecked")
-    public void update(Object o, String[] roles) {
-        User userNew = (User)o;
+    public void update(User userNew, List<String> roles) {
         User userOld = (User)selectById(userNew.getId());
         Set<Role> newRoles = new HashSet<>();
 

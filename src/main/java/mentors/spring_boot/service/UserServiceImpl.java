@@ -2,10 +2,12 @@ package mentors.spring_boot.service;
 
 
 import mentors.spring_boot.dao.UserDao;
+import mentors.spring_boot.model.Role;
 import org.springframework.stereotype.Service;
 
 import mentors.spring_boot.model.User;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -23,7 +25,7 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public Object getUserByLogin(String login) {
+    public User getUserByLogin(String login) {
         return userDao.getUserByLogin(login);
     }
 
@@ -33,7 +35,7 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    public void add(Object user, String[] roles) {
+    public void add(User user, List<String> roles) {
         userDao.add(user, roles);
     }
 
@@ -43,7 +45,7 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    public void update(Object user, String[] roles) {
+    public void update(User user, List<String> roles) {
         userDao.update(user, roles);
     }
 

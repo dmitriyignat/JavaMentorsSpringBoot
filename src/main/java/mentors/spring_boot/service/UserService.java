@@ -1,29 +1,32 @@
 package mentors.spring_boot.service;
 
+import mentors.spring_boot.model.Role;
+import mentors.spring_boot.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
+import java.util.Set;
 
-public interface UserService<T> {
-        @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-        T getUserByLogin(String login);
+public interface UserService {
+//        @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+        User getUserByLogin(String login);
 
-        @PreAuthorize("hasRole('ROLE_ADMIN')")
-        List<T> getAll();
+//        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        List<User> getAll();
 
-        @PreAuthorize("hasRole('ROLE_ADMIN')")
-        T getById(long id);
 
-        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        User getById(long id);
+
+
         long validate(String login, String password);
 
-        @PreAuthorize("hasRole('ROLE_ADMIN')")
-        void add(T t, String[] roles);
 
-        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        void add(User user, List<String> roles);
+
+
         void delete(long id);
 
-        @PreAuthorize("hasRole('ROLE_ADMIN')")
-        void update(T t, String[] roles);
+
+        void update(User user, List<String> roles);
 
 }

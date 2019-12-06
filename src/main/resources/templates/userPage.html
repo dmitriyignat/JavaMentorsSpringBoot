@@ -1,53 +1,36 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <title>User page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
-    <style>
-        .col-2 {
-            padding: 0px;
-        }
-        .list-group-item:first-child {
-                     border-top-left-radius: unset;
-                     border-top-right-radius: unset;
-        }
-        .list-group-item:last-child {
-            border-bottom-left-radius: unset;
-            border-bottom-right-radius: unset;
-        }
-        .row {
-            height: 100%;
-        }
-        .welcome {
-            margin-top: 10px;
-            margin-left: 20px;
-        }
-    </style>
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="/css/userPage.css" rel="stylesheet" media="screen" />
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-md navbar-dark navbar-fixed-top bg-dark">
         <span class="navbar-brand text-muted">Project name</span>
-        <a class="nav navbar-nav ml-auto text-muted" th:href="@{/logout}">Logout</a>
+        <a class="nav navbar-nav ml-auto text-muted" href="/logout">Logout</a>
     </nav>
 </header>
 <div class="row">
     <div class="col-2">
         <div class="list-group">
-            <a th:href="@{/welcome}" class="list-group-item list-group-item-action active">User</a>
-            <a th:href="@{/read}" class="list-group-item list-group-item-action">Admin</a>
+            <a href="" class="list-group-item list-group-item-action active" id="navUserPage">User</a>
+            <a href="/admin/read" class="list-group-item list-group-item-action">Admin</a>
         </div>
     </div>
     <div class="col-10 bg-light">
         <div class="welcome">
             <h1 class="h3 mb-3 font-weight-normal">User page</h1>
-            <p>Hello <span th:text="${user.name}"></span> <span th:text="${user.login}"></span></p>
+            <p id="welcome"></p>
         </div>
     </div>
 </div>
-<script th:src="@{webjars/jquery/3.4.1/jquery.min.js}"></script>
-<script th:src="@{webjars/popper.js/1.14.7/umd/popper.min.js}"></script>
-<script th:src="@{webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+
+<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+<script src="/webjars/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="/js/userPage.js"></script>
 </body>
 </html>
