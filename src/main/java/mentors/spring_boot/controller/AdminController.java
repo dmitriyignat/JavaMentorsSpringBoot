@@ -2,9 +2,8 @@ package mentors.spring_boot.controller;
 
 
 
+import mentors.spring_boot.model.Role;
 import mentors.spring_boot.model.User;
-import mentors.spring_boot.request.UserRequest;
-import mentors.spring_boot.response.UserResponse;
 import mentors.spring_boot.service.RoleService;
 import mentors.spring_boot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
-    private UserResponse response;
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
@@ -31,12 +29,10 @@ public class AdminController {
         this.roleService = roleService;
     }
     @GetMapping(value = "/getUser")
-    public UserResponse getUser() {
+    public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) userService.getUserByLogin(authentication.getName());
-        response = new UserResponse();
-        response.setUser(user);
-        return response;
+        return user;
     }
 
     @GetMapping(value = {"/welcome", "/"})
@@ -51,29 +47,29 @@ public class AdminController {
         return model;
     }
 
+    @GetMapping(value = "/roles")
+    public List<Role> getAllRoles() {
+        return roleService.getAll();
+    }
+
     @PostMapping(value = "/readUsers")
-    public UserResponse readAllUsers() {
+    public List<User> readAllUsers() {
         List<User> users = userService.getAll();
-        response.setUsers(users);
-        response.setRoles(roleService.getAll());
-        return response;
+        return users;
     }
 
     @PostMapping(value = "/updateUser")
-    public void updateUser(@RequestBody UserRequest userRequest) {
-        User user = userService.getById(userRequest.getId());
-        if (user.getLogin().equals(userRequest.getLogin()) || userService.validate(userRequest.getLogin(), userRequest.getPassword()) <= 0) {
-            user = new User(userRequest.getLogin(), userRequest.getName(), userRequest.getPassword());
-            user.setId(userRequest.getId());
-            userService.update(user, userRequest.getRoles());
+    public void updateUser(@RequestBody User userNew) {
+        User user = userService.getById(userNew.getId());
+        if (user.getLogin().equals(userNew.getLogin()) || userService.validate(userNew.getLogin(), userNew.getPassword()) <= 0) {
+            userService.update(userNew);
         }
     }
 
     @PostMapping(value = "/addUser")
-    public void addUser(@RequestBody UserRequest userRequest) {
-        User user = new User(userRequest.getLogin(), userRequest.getName(), userRequest.getPassword());
-        if (userService.validate(userRequest.getLogin(), userRequest.getPassword()) == 0) {
-            userService.add(user, userRequest.getRoles());
+    public void addUser(@RequestBody User user) {
+        if (userService.validate(user.getLogin(), user.getPassword()) == 0) {
+            userService.add(user);
         }
 
     }

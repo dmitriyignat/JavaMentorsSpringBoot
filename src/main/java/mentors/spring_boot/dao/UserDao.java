@@ -18,8 +18,12 @@ public interface UserDao {
 
     void add(User user, List<String> roles);
 
+    void add(User user);
+
     void delete(long id);
 
     void update(User user, List<String> roles);
+
+    void update(User user);
 
 }

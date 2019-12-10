@@ -52,6 +52,10 @@ public class UserDaoHibernateImpl implements UserDao {
         entityManager.persist(user);
     }
 
+    public void add(User user) {
+        entityManager.persist(user);
+    }
+
     public void delete(long id) {
         entityManager.remove((User)selectById(id));
     }
@@ -72,5 +76,15 @@ public class UserDaoHibernateImpl implements UserDao {
         userOld.setPassword(userNew.getPassword());
         userOld.setRoles(newRoles);
         entityManager.merge(userOld);
+    }
+
+    public void update(User userNew) {
+        User userOld = (User)selectById(userNew.getId());
+        userOld.setLogin(userNew.getLogin());
+        userOld.setName(userNew.getName());
+        userOld.setPassword(userNew.getPassword());
+        userOld.setRoles(userNew.getRoles());
+        entityManager.merge(userOld);
+
     }
 }

@@ -39,6 +39,8 @@ public class UserServiceImpl implements UserService{
         userDao.add(user, roles);
     }
 
+    public void add(User user) {userDao.add(user);}
+
 
     public long validate(String login, String password) {
         return userDao.validate(login, password);
@@ -48,6 +50,8 @@ public class UserServiceImpl implements UserService{
     public void update(User user, List<String> roles) {
         userDao.update(user, roles);
     }
+
+    public void update(User user) {userDao.update(user);}
 
 
     public void delete(long id) {

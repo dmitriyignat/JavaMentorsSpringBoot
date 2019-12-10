@@ -8,9 +8,9 @@ $(document).ready(function ($) {
         type: 'GET',
         url: path,
         success: function (data) {
-            var message = "Hello " + data.user.login + " " + data.user.name;
+            var message = "Hello " + data.login + " " + data.name;
             var json = "<h4>Ajax Response</h4><pre>"
-                + JSON.stringify(data, null, 4) + "</pre>";
+                + JSON.stringify(data) + "</pre>";
             $('#welcome').html(message);
 
             console.log("SUCCESS : ", data);

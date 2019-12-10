@@ -2,7 +2,6 @@ package mentors.spring_boot.controller;
 
 
 import mentors.spring_boot.model.User;
-import mentors.spring_boot.response.UserResponse;
 import mentors.spring_boot.service.RoleService;
 import mentors.spring_boot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ public class UserController {
 
     private final UserService userService;
     private final RoleService roleService;
-    private UserResponse response;
 
 
 
@@ -28,12 +26,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/getUser")
-    public UserResponse getUser() {
+    public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) userService.getUserByLogin(authentication.getName());
-        response = new UserResponse();
-        response.setUser(user);
-        return response;
+        return user;
     }
 
     @GetMapping(value = {"/welcome", "/"})

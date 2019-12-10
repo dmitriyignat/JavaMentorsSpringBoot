@@ -5,22 +5,31 @@ document.getElementById("navUserPage").setAttribute("href", roleName + "/welcome
 $(document).on("click", "#nav-profile-tab", function () {
     $("#inputRole").empty();
     $.each(roles, function (index, role) {
-        $("#inputRole").append($("<option>").val(role).text(role));
+        $("#inputRole").append($("<option>").val(role.name).text(role.name));
     });
 });
 
 $(document).on("click", "#addUserButton", function (event) {
-    var data = {};
+    let data = {};
+    var formRoles;
+    var originalRoles = roles.map((role) => role);
     var formData = $(".addUser").serializeArray();
+    formData.pop();
     $.each(formData, function(index, value) {
         if (value.name === "roles") {
-            data[value.name] = value.value.split(",");
+            formRoles = value.value.split(",");
+            $.each(roles, function (j, role) {
+                if (!formRoles.includes(role.name)) {
+                    originalRoles.splice(originalRoles.indexOf(role), 1);
+                }
+                data[value.name] = originalRoles;
+            })
         } else {
             data[value.name] = value.value;
         }
     });
-    console.log(JSON.stringify(data));
     let json = JSON.stringify(data);
+    console.log(json);
     fetch("/admin/addUser", {
         method: "POST",
         body: json,
@@ -45,7 +54,6 @@ $(document).on("click", "#showRoles", function (event) {
 });
 
 $(document).on("click", "#addUserRole", function (event) {
-    //event.preventDefault();
     if (document.getElementById("inputRole").style.visibility === 'hidden') {
         document.getElementById("inputRole").style.visibility = 'visible';
     } else {
@@ -73,7 +81,9 @@ $(document).on("click", ".edit", function () {
     $("#updatePassword").val(user.password);
     $("#updateRole").empty();
     $.each(roles, function (index, role) {
-        $("#updateRole").append($("<option>").val(role).text(role).attr('selected', rolesUser.includes(role)));
+        console.log(user.roles[0] === role);
+        $("#updateRole").append($("<option>").val(role.name).text(role.name).attr('selected', rolesUser.includes(role.name)));
+       // $("#updateRole").append($("<option>").val(role.name).text(role.name).attr('selected', rolesUser.includes(role.name)));
     });
     $("#showRoles").val($("#updateRole").val());
 });
@@ -94,29 +104,45 @@ $(document).on("click", "#deleteButton", function (event) {
 });
 
 $(document).on("click", "#submit", function (event) {
-    event.preventDefault();
-    var data = {};
+    let data = {};
+    var formRoles;
+    var originalRoles = roles.map((role) => role);
     var formData = $(".update").serializeArray();
     $.each(formData, function(index, value) {
         if (value.name === "roles") {
-            data[value.name] = value.value.split(",");
+            formRoles = value.value.split(",");
+            $.each(roles, function (j, role) {
+                if (!formRoles.includes(role.name)) {
+                    originalRoles.splice(originalRoles.indexOf(role), 1);
+                }
+                data[value.name] = originalRoles;
+            })
         } else {
             data[value.name] = value.value;
         }
     });
-    $.ajax({
-        type: 'POST',
-        contentType: "application/json",
-        dataType: 'json',
-        url: '/admin/updateUser',
-        data: JSON.stringify(data),
-        timeout: 100,
-        success:  function () {
-            location.reload()
+    let json = JSON.stringify(data);
+    console.log(json);
+    fetch("/admin/updateUser", {
+        method: "POST",
+        body: json,
+        headers: {
+            "Content-Type": "application/json",
         }
-    });
+    }).finally(() => location.reload());
 });
 
+$(document).ready(function () {
+    $.ajax({
+        type: 'GET',
+        url: '/admin/roles',
+        timeout: 100,
+        success: function (data) {
+            roles = data;
+            console.log(roles);
+        }
+    })
+});
 $(document).ready(readUsers());
 
 function readUsers() {
@@ -126,10 +152,8 @@ function readUsers() {
         url: '/admin/readUsers',
         timeout: 100,
         success: function (data) {
-            roles = $.map(data.roles, function (role) {
-                return role.name;
-            });
-            $.each(data.users, function(i, user) {
+            console.log(data);
+            $.each(data, function(i, user) {
                 $("#tableBody").append($('<tr>').append(
                     $('<th>').append($('<span>')).text(user.id),
                     $('<td>').append($.map(user.roles, function (role) {
