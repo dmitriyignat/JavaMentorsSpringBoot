@@ -15,6 +15,7 @@ public class UserServiceImpl implements UserService{
         this.repository = repository;
     }
 
+    @Override
     public User getById(long id) {
         return repository.getOne(id);
     }
@@ -35,11 +36,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public long validate(String login, String password) {
-        return repository.findUsersByLoginAndPassword(login, password);
+    public long validate(String login) {
+        return repository.countUsersByLogin(login);
     }
 
+    @Override
     public void update(User user) {
+
         repository.save(user);
     }
 

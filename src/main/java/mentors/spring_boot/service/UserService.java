@@ -11,7 +11,7 @@ public interface UserService {
 
         User getById(long id);
 
-        long validate(String login, String password);
+        long validate(String login);
 
         void add(User user);
 

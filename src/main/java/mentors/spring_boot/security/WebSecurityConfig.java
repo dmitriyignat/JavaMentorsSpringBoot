@@ -1,4 +1,4 @@
-package mentors.spring_boot.config;
+package mentors.spring_boot.security;
 
 import mentors.spring_boot.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -37,7 +37,7 @@ $(document).on("click", "#addUserButton", function () {
     json = JSON.stringify(data);
 
     fetch("/admin/addUser", {
-        method: "POST",
+        method: "PUT",
         body: json,
         headers: {
             "Content-Type": "application/json",
@@ -96,7 +96,7 @@ $(document).on("click", "#deleteButton", function () {
     let id = $(this).data('id');
     console.log(id);
     $.ajax({
-        type: 'POST',
+        type: 'DELETE',
         url: '/admin/delete',
         data: {id : id},
         timeout: 100,
@@ -109,7 +109,6 @@ $(document).on("click", "#deleteButton", function () {
 
 $(document).on("click", "#submit", function () {
     formData = $(".update").serializeArray();
-    formData.pop();
     fillData();
     json = JSON.stringify(data);
     fetch("/admin/updateUser", {
@@ -136,7 +135,7 @@ $(document).ready(readUsers());
 function readUsers() {
     $("#tableBody").empty();
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: '/admin/readUsers',
         timeout: 3000,
         success: function (data) {

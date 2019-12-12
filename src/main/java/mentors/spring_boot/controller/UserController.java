@@ -5,7 +5,6 @@ import mentors.spring_boot.model.Role;
 import mentors.spring_boot.model.User;
 import mentors.spring_boot.service.RoleService;
 import mentors.spring_boot.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ public class UserController {
     private final UserService userService;
     private final RoleService roleService;
 
-    @Autowired
     public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
@@ -60,7 +58,7 @@ public class UserController {
         return roleService.getAll();
     }
 
-    @PostMapping(value = "/admin/readUsers")
+    @GetMapping(value = "/admin/readUsers")
     public List<User> readAllUsers() {
         return userService.getAll();
     }
@@ -68,24 +66,24 @@ public class UserController {
     @PostMapping(value = "/admin/updateUser")
     public void updateUser(@RequestBody User userNew) {
         User user = userService.getById(userNew.getId());
-        if (user.getLogin().equals(userNew.getLogin()) || userService.validate(userNew.getLogin(), userNew.getPassword()) <= 0) {
+        if (user.getLogin().equals(userNew.getLogin()) || userService.validate(userNew.getLogin()) <= 0) {
             userService.update(userNew);
         }
     }
 
-    @PostMapping(value = "/admin/addUser")
+    @PutMapping(value = "/admin/addUser")
     public void addUser(@RequestBody User user) {
-        if (userService.validate(user.getLogin(), user.getPassword()) == 0) {
+        if (userService.validate(user.getLogin()) == 0) {
             userService.add(user);
         }
     }
 
-    @PostMapping(value = "/admin/delete")
+    @DeleteMapping(value = "/admin/delete")
     public void deleteUserById(@RequestParam("id") long id) {
         userService.delete(id);
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String login() {
         return "login";
     }
