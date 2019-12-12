@@ -6,7 +6,6 @@ import mentors.spring_boot.model.Role;
 import mentors.spring_boot.model.User;
 import mentors.spring_boot.service.RoleService;
 import mentors.spring_boot.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,20 +22,19 @@ public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
 
-    @Autowired
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
+
     @GetMapping(value = "/getUser")
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) userService.getUserByLogin(authentication.getName());
-        return user;
+        return userService.getUserByLogin(authentication.getName());
     }
 
     @GetMapping(value = {"/welcome", "/"})
-    public ModelAndView readUser(ModelAndView model, Authentication authentication) {
+    public ModelAndView readUser(ModelAndView model) {
         model.setViewName("userPage");
         return model;
     }
@@ -71,7 +69,6 @@ public class AdminController {
         if (userService.validate(user.getLogin(), user.getPassword()) == 0) {
             userService.add(user);
         }
-
     }
 
     @PostMapping(value = "/delete")
