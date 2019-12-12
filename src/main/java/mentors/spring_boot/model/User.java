@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -49,10 +48,6 @@ public class User implements UserDetails {
         this.name = name;
         this.password = password;
         this.login = login;
-    }
-
-    public void addRole(Role role) {
-        roles.add(role);
     }
 
     public User(long id, String login, String name, String password) {
