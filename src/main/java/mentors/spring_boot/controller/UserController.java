@@ -62,8 +62,7 @@ public class UserController {
 
     @PostMapping(value = "/admin/readUsers")
     public List<User> readAllUsers() {
-        List<User> users = userService.getAll();
-        return users;
+        return userService.getAll();
     }
 
     @PostMapping(value = "/admin/updateUser")
